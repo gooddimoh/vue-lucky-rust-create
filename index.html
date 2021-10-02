@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.js CRUD App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/19e0b2e47d.js"></script>
+    <style type="text/css">
+        #overlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6)
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="app">
+
+    <div class="container-fluid">
+        <div class="row bg-dark">
+            <div class="col-lg-12">
+                <p class="text-center text-light display-4 pt-2" style="font-size: 25px;">CRUD Application Using
+                    Vue.js, PHP and MySQLi</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-lg-6">
+                <h3 class="text-info">Register Users</h3>
+            </div>
+            <div class="col-lg-6">
+                <button class="btn btn-info float-right" @click="readModal=true">
+                    <i class="fas fa-user"></i> Add New User
+                </button>
+            </div>
+        </div>
+
+        <hr class="bg-info">
+
+        <div class="alert alert-danger" v-if="errorMsg">{{errorMsg}}</div>
+        <div class="alert alert-success" v-if="successMsg">{{successMsg}}</div>
+
+        <!--Displaying Records-->
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-stripped">
+                    <thead>
+                    <tr class="text-center bg-info text-light">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center" v-for="user in users">
+                        <td>{{user.id}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.phone}}</td>
+                        <td><a href="#" class="text-success" @click="editModal = true; selectUser(user)"><i
+                                class="fas fa-edit"></i></a></td>
+                        <td><a href="#" class="text-danger" @click="deleteModal=true; selectUser(user)"><i
+                                class="fas fa-trash-alt"></i></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="logout">
+        <div class="img">
+            <img src="" alt="">
+            <p>danter900</p>
+            <a href="">
+                <span class="logout"> </span>
+                <span class="coin">
+                <span class="coin">
+                  <svg width="533" height="101" viewBox="0 0 533 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="533" height="101" fill="#1C202A"/>
+<path opacity="0.1" fill-rule="evenodd" clip-rule="evenodd" d="M4 0H533V99H4V0Z" fill="url(#paint0_linear)"/>
+<g clip-path="url(#clip0)">
+<path d="M149.091 65.0821C149.091 70.1237 145.021 74.2098 140 74.2098C139.202 74.2098 138.428 74.1068 137.69 73.912C133.788 72.8866 130.909 69.3212 130.909 65.0821C130.909 63.9194 131.126 62.8069 131.521 61.7827C132.838 58.373 136.138 55.9544 140 55.9544C145.021 55.9544 149.091 60.0404 149.091 65.0821Z"
+      fill="#FFCD67"/>
+<path d="M140 73.4746C144.617 73.4746 148.359 69.7172 148.359 65.0821C148.359 60.447 144.617 56.6895 140 56.6895C135.384 56.6895 131.642 60.447 131.642 65.0821C131.642 69.7172 135.384 73.4746 140 73.4746Z"
+      fill="#FFAB01"/>
+<path d="M140 73.4746C144.617 73.4746 148.359 69.7172 148.359 65.0821C148.359 60.447 144.617 56.6895 140 56.6895C135.384 56.6895 131.642 60.447 131.642 65.0821C131.642 69.7172 135.384 73.4746 140 73.4746Z"
+      fill="#FFAB01"/>
+<path d="M145.161 70.2636C148.011 67.4019 148.011 62.7622 145.161 59.9005C142.311 57.0388 137.69 57.0388 134.839 59.9005C131.989 62.7622 131.989 67.4019 134.839 70.2636C137.69 73.1252 142.311 73.1252 145.161 70.2636Z"
+      fill="#FFCD67"/>
+<path d="M140 71.6369C143.606 71.6369 146.528 68.7022 146.528 65.0821C146.528 61.462 143.606 58.5273 140 58.5273C136.395 58.5273 133.472 61.462 133.472 65.0821C133.472 68.7022 136.395 71.6369 140 71.6369Z"
+      fill="#B2822D"/>
+<path d="M146.123 66.0567C146.659 62.6616 144.353 59.4729 140.971 58.9346C137.59 58.3963 134.414 60.7122 133.878 64.1074C133.342 67.5025 135.648 70.6911 139.03 71.2294C142.411 71.7677 145.587 69.4518 146.123 66.0567Z"
+      fill="#FFAB01"/>
+<path d="M142.064 69.791C144.654 68.6465 145.83 65.6106 144.69 63.0099C143.55 60.4093 140.526 59.2289 137.936 60.3734C135.346 61.5178 134.17 64.5538 135.31 67.1544C136.45 69.755 139.474 70.9355 142.064 69.791Z"
+      fill="#FFCD67"/>
+<path d="M141.978 69.5919C144.459 68.4946 145.583 65.5861 144.491 63.0957C143.398 60.6053 140.501 59.4759 138.02 60.5732C135.54 61.6705 134.415 64.579 135.508 67.0694C136.601 69.5599 139.498 70.6892 141.978 69.5919Z"
+      fill="#FFAB01"/>
+<path opacity="0.19" fill-rule="evenodd" clip-rule="evenodd"
+      d="M146.619 71.3399C145.673 72.3482 144.5 73.1403 143.184 73.6346L139.067 56.0019C139.374 55.9705 139.685 55.9544 140 55.9544C141.111 55.9544 142.175 56.1544 143.159 56.5205L146.619 71.3399Z"
+      fill="white"/>
+<path opacity="0.19" fill-rule="evenodd" clip-rule="evenodd"
+      d="M141.17 74.1349C140.787 74.1843 140.396 74.2098 140 74.2098C139.411 74.2098 138.835 74.1536 138.277 74.0459L134.489 57.8221C135.253 57.2365 136.113 56.7697 137.04 56.4492L141.17 74.1349Z"
+      fill="white"/>
+<path d="M139.738 69H140.277L140.28 68.2844C141.372 68.1875 141.997 67.45 142 66.4031C141.997 65.2938 141.252 64.7875 140.468 64.5594L140.3 64.5063L140.31 62.7219C140.718 62.8094 140.98 63.1094 141.02 63.5594H141.929C141.913 62.5656 141.277 61.8406 140.316 61.7281L140.318 61H139.779L139.776 61.7281C138.822 61.8469 138.135 62.5656 138.137 63.6C138.137 64.5188 138.669 65.0469 139.527 65.3188L139.756 65.3906L139.746 67.2812C139.29 67.1937 138.962 66.875 138.929 66.3094H138C138.036 67.4812 138.692 68.1781 139.74 68.2844L139.738 69ZM140.285 67.2812L140.295 65.5656C140.758 65.7313 141.053 65.95 141.056 66.3938C141.053 66.8562 140.751 67.1875 140.285 67.2812ZM139.761 64.3375C139.41 64.2 139.089 63.9719 139.094 63.5281C139.097 63.125 139.344 62.8125 139.771 62.7219L139.761 64.3375Z"
+      fill="#714A04"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear" x1="533" y1="0" x2="15" y2="0" gradientUnits="userSpaceOnUse">
+<stop stop-color="#CDA43B"/>
+<stop offset="1" stop-color="#CDA43B" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip0">
+<rect width="20" height="20" fill="white" transform="translate(130 55)"/>
+</clipPath>
+</defs>
+</svg>
+
+                </span>
+                <p>
+                  16.02
+                </p>
+                  <p>danter900</p>
+                  <span class="buttons">
+                    <input type="text" placeholder="ПОПОЛНИТЬ">
+                    <input type="text" placeholder="ПРОФИЛЬ">
+                  </span>
+              </span>
+            </a>
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readHeader">
+        <div class="left">
+            <p>Поддержка</p>
+            <p><i class="headphonesicon"></i> Вопросы и ответы</p>
+
+            <p class="vk">VK</p>
+            <p class="instagram">Instagram</p>
+            <p class="discord">Discord</p>
+            <p class="telegram">Telegram</p>
+        </div>
+        <div class="center">
+            <div class="container">
+                <div class="crash">
+                    <i></i>
+                    <p></p>
+                </div>
+                <div class="logo">
+                    <p>lucky rust</p>
+                </div>
+                <div class="jackpot">
+                    <i class="icon">
+                        jackpot
+                    </i>
+                </div>
+            </div>
+            <div class="login-via-telegram">
+                <a href="">войти через steam</a>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readHeader">
+        <div class="time">
+            <div class="gamers">
+
+            </div>
+            <div class="ourbank">
+
+            </div>
+            <div class="skins">
+                <i></i>
+                <p>скины</p>
+                <div class="item">16</div>
+                <p>Игра №901149</p>
+                <div class="wait-for-answer">
+                    <p>
+                        <span class="time"></span>
+                    <p>
+                        Ожидание предметов...
+                    </p>
+                    </p>
+                </div>
+            </div>
+            <div class="income">
+                <p>
+              <span class="icon">
+                <span class="icon">
+                </span>
+              </span>
+                    доход:
+                </p>
+                <p>АТОВЫВОД</p>
+                <p>
+                    3.00x
+                </p>
+                <p>
+                    1.2x
+                </p>
+                <p>
+                    2x
+                </p>
+                <p>3x</p>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readHeader">
+        <p>Авторизуйтесь на сайте</p>
+        <p>чтобі использовать инвентарь</p>
+        <input type="text" placeholder="Авторизация">
+    </div>
+    <div class="container" id="overlay" v-if="readHeader">
+        <div class="chat">
+            <div class="create-tiket">
+                <i class="chat">
+                    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M28.0795 0.0149527C12.8951 0.0149527 0.546875 12.3632 0.546875 27.5475C0.546875 33.7443 2.6626 39.7608 6.53345 44.6071L2.52759 53.9095C2.19733 54.6747 2.5575 55.5599 3.30774 55.8752C3.57776 55.9953 3.87769 56.0252 4.16266 55.9803L18.8518 53.3994C21.7925 54.4645 24.8837 55.0049 28.0043 54.99C43.1882 54.99 55.5364 42.6413 55.5364 27.4574C55.5668 12.3184 43.3082 0.0149527 28.1692 -9.53674e-07C28.1542 0.0149527 28.1243 0.0149527 28.0795 0.0149527ZM28.0192 52.004C25.1234 52.004 22.2578 51.4789 19.5418 50.4586C19.2867 50.3535 19.0167 50.3386 18.7467 50.3834L6.38348 52.544L9.65448 44.9373C9.87964 44.4118 9.78949 43.797 9.41437 43.3616C7.64386 41.3062 6.23352 38.9657 5.24316 36.43C4.13275 33.5939 3.56281 30.5784 3.56281 27.5326C3.56281 13.9987 14.5755 3.00055 28.0944 3.00055C41.583 2.97064 52.5359 13.8787 52.5508 27.3672C52.5508 27.3976 52.5508 27.4275 52.5508 27.4574C52.5508 41.0062 41.5381 52.004 28.0192 52.004Z"
+                              fill="#24B361"/>
+                    </svg>
+                    <p>Нужна помощь ?</p>
+                    <p> У вас остались вопросы без ответа? </p>
+                    <p> У вас есть какие-нибудь предложения ?</p>
+                    <input type="text" placeholder="СОЗДАТЬ ТИКЕТ">
+                    <input type="text" placeholder="ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ">
+
+                </i>
+            </div>
+            <p>Чат</p>
+            <p>Онлайн: 200</p>
+            <p>Звук: Вкл</p>
+            <p>
+              <span class="eng">
+                <span class="arrow">
+                  <span class="shevron">
+                    >
+                  </span>
+                </span>
+              </span>
+
+                <span class="item">
+                <span class="img">
+                  <img src="" alt="">
+                </span>
+                  <span class="title"></span>
+            <p></p>
+            </span>
+            </p>
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readModal">
+        <div class="img">
+            <img src="" alt="">
+            <div class="items">
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+            </div>
+            <div class="icons">
+                <div class="coins">
+                    <i></i>
+                    2393
+                </div>
+            </div>
+            <div class="count">
+                1.5x
+            </div>
+
+            <div class="img">
+                <img src="" alt="gun">
+            </div>
+
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New User</h5>
+                    <button type="button" class="close" @click="readModal=false">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control form-control-lg" placeholder="Name"
+                                   required v-model="newUser.name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control form-control-lg"
+                                   placeholder="Email" required v-model="newUser.email">
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" name="phone" class="form-control form-control-lg" placeholder="Phone"
+                                   required v-model="newUser.phone">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-info btn-block btn-lg" @click="addDataIfValid('insert')">Add
+                                User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readModal">
+        <p>Добавить luckyrust.com в свой никнейм</p>
+        <div class="block">
+            <p>ВАШ ШАНС</p>
+            <p>0.00%</p>
+        </div>
+        <div class="block">
+            <p>Ваши предметы</p>
+            <p>
+                <span>
+                    <i class="coin"></i>
+            <p>0</p>
+            </span>
+            </p>
+            <p>
+                <input type="text" placeholder="ДЕПОЗИТ">
+            </p>
+            <p>НОВАЯ ИГРА [3244]</p>
+
+            <div class="block">
+                <div class="img">
+                    <img src="" alt="">
+                    <div class="icon">
+                        <div class="coin">
+
+                        </div>
+                        <p>16.02</p>
+                    </div>
+
+                    <p>ШАНС</p>
+                    <p>100.00%</p>
+
+                    <p>4</p>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <p>ВАША СТАВКА</p>
+            <p></p>
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readModal">
+        <div class="left">
+            <p>Высокая ставка
+            <p>Минимальная ставка 3р, Максимальная ставка 100р. Максимум 10 предметов.</p>
+        </div>
+        <div class="search">
+            <i class="search"></i>
+            <input type="text" placeholder="Поиск предметов...">
+            <i class="visibility">
+
+            </i>
+            <div class="close">
+
+            </div>
+            <div class="item">
+
+            </div>
+            <div class="buttons">
+                <p>ВЫБРАННЫЙ:</p>
+                <p>icon
+                <p>0.00</p> </p>
+                <p>0/10 предметов</p>
+            </div>
+            <div class="buttons">
+                <input type="text" placeholder="ВЫБРАТЬ ВСЕ">
+                <input type="text" placeholder="ПЕРЕЗАГРУЗКА">
+                <div class="icon"></div>
+                <input type="text" placeholder="ДЕПОЗИТ">
+            </div>
+        </div>
+    </div>
+    <div class="container" id="overlay" v-if="readModal">
+        <div class="block-with-gifts">
+            <div class="item">
+                gift
+                text
+                count
+            </div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <p>
+        <h1>ОПИСАНИЕ ПАРТНЕРСКОЙ ПРОГРАММЫ</h1>
+        <p>С помощью кнопки "Поделиться" Вы можете делиться своей партнерской ссылкой как в соц. сетях, так и
+            напрямую. </p>
+        <p>Вы получаете 5% от суммы всех заказов привлеченного пользователя. Процент фиксирован.</p>
+        <p>Полученные средства можно тратить на покупку кейсов</p>
+        <p>Средства на баланс перестают начисляеться спустя 30 дней с момента привлечения последнего реферала.</p>
+        </p>
+        <div class="item">
+            <h1>Поделитсья РЕФЕРАЛЬНОЙ ССЫЛКОЙ</h1>
+            <p>
+                <input type="text">
+                <a href=" https://luckyrust-ref.com/getprize&ref=775" class="link">
+                </a>
+            <p>Отправьте реферальную ссылку друзьям</p>
+            <div class="item">
+                <a href="" class="vk"></a>
+                <a href="" class="instagram"></a>
+                <a href="" class="discord"></a>
+                <a href="" class="telegram"></a>
+            </div>
+            <i>
+                <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.7559 4.29643C18.7559 4.15985 18.7365 4.03499 18.6354 3.93385L14.8221 0.120504C14.7065 0.00492187 14.5608 0 14.408 0H5.64709C5.42015 0 5.23611 0.183996 5.23611 0.410977V4.08717H0.655117C0.428178 4.08717 0.244141 4.27116 0.244141 4.49814V20.589C0.244141 20.816 0.428137 21 0.655117 21H13.3529C13.5799 21 13.7639 20.816 13.7639 20.589V16.9132H18.345C18.5719 16.9132 18.7559 16.7292 18.7559 16.5023V11.5582C18.7559 11.3312 18.5719 11.1472 18.345 11.1472C18.118 11.1472 17.934 11.3312 17.934 11.5582V16.0913H13.7639V12.2724H15.8147C16.0417 12.2724 16.2257 12.0884 16.2257 11.8614C16.2257 11.6345 16.0417 11.4505 15.8147 11.4505H13.7639V9.79757H15.8147C16.0417 9.79757 16.2257 9.61357 16.2257 9.38659C16.2257 9.15961 16.0417 8.97561 15.8147 8.97561H13.7639V8.38351C13.7639 8.24685 13.7447 8.12204 13.6435 8.02077L12.9454 7.32268H15.8147C16.0417 7.32268 16.2257 7.13869 16.2257 6.91171C16.2257 6.68473 16.0417 6.50073 15.8147 6.50073H12.1235L9.83015 4.20738C9.71448 4.09172 9.56888 4.08704 9.41601 4.08704H6.05806V0.821912H14.1205V4.22445C14.1205 4.45143 14.3045 4.63542 14.5315 4.63542H17.934V7.8613C17.934 8.08828 18.118 8.27228 18.345 8.27228C18.5719 8.27228 18.7559 8.08828 18.7559 7.8613V4.29643H18.7559ZM9.95049 5.49023L12.3607 7.90047H9.95049V5.49023ZM12.942 8.72238V20.1781H1.06605V4.90904H9.12853V8.31141C9.12853 8.53839 9.31253 8.72238 9.53951 8.72238H12.942ZM14.9424 3.81351V1.40323L17.3527 3.81347H14.9424V3.81351Z"
+                          fill="#21252F"/>
+                </svg>
+            </i>
+            <input type="text" placeholder="КОПИРОВАТЬ">
+            </p>
+        </div>
+    </div>
+    <div class="container dropdown" id="overlay" v-if="readModal">
+        <p>
+            <span class="shevron">
+
+            </span>
+        </p>
+    </div>
+    <div class="container" id="overlay" v-if="readModal">
+        <div class="rullet"></div>
+        <p>ИСТОРИЯ</p>
+        <p>
+        <span class="icon">
+          <span class="coin">
+            4224
+            <span class="close"> </span>
+          </span>
+        </span>
+            <span class="buttons">
+              <span class="min">MIN</span>
+              <span class="max">MAX</span>
+              <span class="number1">+1</span>
+              <span class="number2">+10</span>
+              <span class="number3">1/2</span>
+              <span class="number4">x2</span>
+        </span>
+        </p>
+    </div>
+    <div class="container dropdown" id="overlay" v-if="readModal"></div>
+    <div class="container dropdown" id="overlay" v-if="readModal">
+        <div class="block-with-results">
+            <div class="storage"></div>
+            <div class="blance"></div>
+            <div class="result"></div>
+            <div class="all">
+                <input type="checkbox">
+
+                <div class="container">
+                    <p>Ваши предметы</p>
+                    <div class="item">
+
+                        <div class="gun"></div>
+                        <p>m4a4</p>
+                        <p>Neo-Noir</p>
+                        <div class="item">
+                            <div class="coin"></div>
+                            <div class="price">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container" id="overlay" v-if="readPayment">
+        <div class="payment">
+            <div class="component1">
+                <div class="item"></div>
+            </div>
+            <div class="component2">
+                <p>Пополнение баланса</p>
+                <p>Visa/MC</p>
+                <p>Qiwi</p>
+                <p>Yandex Money</p>
+                <p>Телефон</p>
+                <p>Free-Kassa</p>
+            </div>
+            <div class="item-mts">
+                <div class="img"></div>
+            </div>
+
+            <p>
+                <a href="В">ВВЕДИТЕ НОМЕР</a>
+                <a href="">
+              <span class="flag">
+                <img src="" alt="img-img">
+              </span>
+                    +7(___)-__-__
+                </a>
+                <span class="compare">
+              <span></span>
+              <a href=""></a>
+              <span>
+                <span class="coin"></span>
+            <p>0.00</p>
+            </span>
+            </span>
+            </p>
+        </div>
+    </div>
+    <div id="overlay" v-if="editModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User</h5>
+                    <button type="button" class="close" @click="editModal=false; window.location.reload()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control form-control-lg" required
+                                   v-model="currentUser.name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control form-control-lg" required
+                                   v-model="currentUser.email">
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" name="phone" class="form-control form-control-lg" required
+                                   v-model="currentUser.phone">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-info btn-block btn-lg" @click="addDataIfValid('update')">Update
+                                User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="overlay" v-if="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete User</h5>
+                    <button type="button" class="close" @click="deleteModal=false">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4">
+                    <h4 class="text-danger">Are you sure want to delete {{currentUser.name}}?</h4>
+                    <hr>
+                    <button class="btn btn-danger btn-lg"
+                            @click="deleteModal=false; deleteUser(); clearMessage()">Yes
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-success btn-lg" @click="deleteModal=false">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container dropdown" id="overlay" v-if="readModal">
+        <div class="graph-result">
+            <div class="result">
+                <p>5.00x</p>
+                <p>4.00x</p>
+                <p>3.00x</p>
+                <p>2.00x</p>
+                <p>1.00x</p>
+                <div class="graph"></div>
+                <div class="mnoguteli">
+                    <span>1.5x</span>
+                    <span>1.5x</span>
+                    <span>1.5x</span>
+                    <span>1.5x</span>
+                    <span>1.5x</span>
+                    <span>1.5x</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container dropdown" id="overlay" v-if="readModal">
+        <div class="moon-icon">
+            <div class="moon">
+                <svg width="303" height="303" viewBox="0 0 303 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M245.026 32.7298H244.872C236.773 34.9308 216.92 39.5309 208.842 34.3366C199.29 28.1737 195.636 9.50922 195.064 6.95605C195.053 6.86097 195.053 6.76501 195.064 6.66992C168.539 -1.30164 140.334 -1.82832 113.53 5.14743C86.7264 12.1232 62.3561 26.3329 43.0829 46.2235C23.8096 66.1141 10.3751 90.9201 4.24758 117.93C-1.8799 144.94 -0.464465 173.115 8.33913 199.375C17.1427 225.635 32.9957 248.97 54.1653 266.829C75.335 284.688 101.007 296.384 128.374 300.638C155.742 304.892 183.753 301.542 209.345 290.952C234.937 280.362 257.126 262.941 273.485 240.593C271.755 236.77 270.534 232.737 269.854 228.597C269.604 227.409 269.384 226.176 269.193 224.9C265.694 203.176 266.464 170.249 273.265 161.665C274.594 159.985 276.067 158.423 277.667 156.999L278.086 156.602C282.911 152.5 288.148 148.908 293.713 145.883C298.599 143.154 302.275 141.481 302.275 141.481C300.904 120.351 295.098 99.7453 285.234 81.0077C275.371 62.27 261.671 45.8203 245.026 32.7298ZM87.2364 204.21L84.3751 211.165C64.8302 186.712 79.6209 148.393 79.6209 148.393C84.307 153.746 88.2392 159.714 91.3082 166.133C91.4403 166.419 91.5503 166.705 91.6604 166.969C93.2612 170.818 93.9758 174.978 93.7514 179.141C92.1901 187.644 90.0126 196.023 87.2364 204.21Z"
+                          fill="url(#paint0_radial)"/>
+                    <defs>
+                        <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                                        gradientTransform="translate(124.359 100.99) rotate(-3.78) scale(178.017)">
+                            <stop stop-color="#FFC827"/>
+                            <stop offset="0.37" stop-color="#FF9E25"/>
+                            <stop offset="0.87" stop-color="#FF741F"/>
+                            <stop offset="1" stop-color="#FF9543"/>
+                        </radialGradient>
+                    </defs>
+                </svg>
+
+            </div>
+            <h4>ВЫПОЛНИ ВСЕ ЗАДАНИЯ И ПОЛУИ БОНУС 200 МОНЕТ</h4>
+        </div>
+
+        <div class="steps">
+            <div class="button">
+                <a href="">1.АВТОРИЗИРОВАТЬСЯ НА САЙТ</a>
+            </div>
+            <div class="button">
+                <a href="">2.ПОДПИСАТЬСЯ НА ГРУППУ VK</a>
+            </div>
+            <div class="button">
+                <a href="">
+                    3.ПОДПИСАТЬСЯ НА РАССЫЛКУ
+                    VK, ПЕРЕЙТИ В DISCORD СЕРВЕР
+                </a>
+            </div>
+            <div class="button">
+                <a href="">
+                    4.ВВЕСТИ ТЕГ САЙТА В СВОЙ НИКНЕЙМ В STEAM
+                </a>
+            </div>
+            <div class="button">
+                <a href="">5.ЗАБЕРИ СВОЙ ПРИЗ 200 МОНЕТ</a>
+                <a href=""></a>
+            </div>
+        </div>
+    </div>
+    <div class="container dropdown" id="overlay" v-if="readModal">
+        <div class="img">
+            <img src="" alt="img">
+        </div>
+        <div class="icon">
+            <div class="coin"></div>
+            <div class="price">16.02</div>
+            <p>RYZENYOU
+                <span class="number"> code  </span>
+                <span class="form">
+                    <input type="text">
+                    <input type="text">
+                    <i class="save"></i>
+                    <input type="text" placeholder="Сохранить">
+                </span>
+            </p>
+        </div>
+        <div class="refferal-system">
+            <p></p>
+            <p>2LVL</p>
+            <p>Всего заработано
+                <span class="coin"></span>
+                <a href=""></a>
+            </p>
+
+            <p>
+                <span class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.28714 5.18142C4.33322 5.18142 5.18122 4.33341 5.18122 3.28734C5.18122 2.24127 4.33322 1.39326 3.28714 1.39326C2.24107 1.39326 1.39307 2.24127 1.39307 3.28734C1.39307 4.33341 2.24107 5.18142 3.28714 5.18142Z"
+      fill="#F6E266"/>
+<path d="M4.17752 1.61559C4.31922 1.88109 4.3998 2.18409 4.3998 2.50607C4.3998 3.55213 3.55178 4.40015 2.50572 4.40015C2.18378 4.40015 1.88073 4.31957 1.61523 4.17787C1.93394 4.77496 2.56291 5.18146 3.28698 5.18146C4.33305 5.18146 5.18106 4.33345 5.18106 3.28738C5.18111 2.56326 4.77461 1.93429 4.17752 1.61559Z"
+      fill="#F1D333"/>
+<path d="M12.0001 3.19266C12.7847 3.19266 13.4207 2.55666 13.4207 1.77211C13.4207 0.987563 12.7847 0.351562 12.0001 0.351562C11.2156 0.351562 10.5796 0.987563 10.5796 1.77211C10.5796 2.55666 11.2156 3.19266 12.0001 3.19266Z"
+      fill="#F6E266"/>
+<path d="M12.6678 0.518295C12.774 0.71742 12.8345 0.94467 12.8345 1.18617C12.8345 1.97072 12.1985 2.60672 11.414 2.60672C11.1725 2.60672 10.9452 2.5463 10.7461 2.44003C10.9851 2.88778 11.4568 3.19266 11.9999 3.19266C12.7845 3.19266 13.4205 2.55665 13.4205 1.77211C13.4205 1.22901 13.1156 0.757311 12.6678 0.518295Z"
+      fill="#F1D333"/>
+<path d="M12.0001 23.6484C12.7847 23.6484 13.4207 23.0124 13.4207 22.2279C13.4207 21.4433 12.7847 20.8073 12.0001 20.8073C11.2156 20.8073 10.5796 21.4433 10.5796 22.2279C10.5796 23.0124 11.2156 23.6484 12.0001 23.6484Z"
+      fill="#F6E266"/>
+<path d="M12.6678 20.9741C12.774 21.1732 12.8345 21.4005 12.8345 21.642C12.8345 22.4265 12.1985 23.0625 11.414 23.0625C11.1725 23.0625 10.9452 23.0021 10.7461 22.8958C10.9851 23.3436 11.4569 23.6485 11.9999 23.6485C12.7845 23.6485 13.4205 23.0125 13.4205 22.2279C13.4205 21.6848 13.1156 21.2131 12.6678 20.9741Z"
+      fill="#F1D333"/>
+<path d="M22.2282 13.4205C23.0127 13.4205 23.6487 12.7845 23.6487 12C23.6487 11.2155 23.0127 10.5795 22.2282 10.5795C21.4436 10.5795 20.8076 11.2155 20.8076 12C20.8076 12.7845 21.4436 13.4205 22.2282 13.4205Z"
+      fill="#F6E266"/>
+<path d="M22.8958 10.7462C23.0021 10.9453 23.0625 11.1726 23.0625 11.4141C23.0625 12.1986 22.4265 12.8346 21.642 12.8346C21.4005 12.8346 21.1732 12.7742 20.9741 12.6679C21.2131 13.1157 21.6849 13.4206 22.2279 13.4206C23.0125 13.4206 23.6485 12.7846 23.6485 12C23.6485 11.4569 23.3436 10.9852 22.8958 10.7462Z"
+      fill="#F1D333"/>
+<path d="M1.77211 13.4205C2.55666 13.4205 3.19266 12.7845 3.19266 12C3.19266 11.2155 2.55666 10.5795 1.77211 10.5795C0.987563 10.5795 0.351562 11.2155 0.351562 12C0.351562 12.7845 0.987563 13.4205 1.77211 13.4205Z"
+      fill="#F6E266"/>
+<path d="M2.43975 10.7462C2.54602 10.9453 2.60649 11.1726 2.60649 11.4141C2.60649 12.1986 1.97049 12.8346 1.18594 12.8346C0.944488 12.8346 0.717191 12.7742 0.518066 12.6679C0.757082 13.1157 1.22883 13.4206 1.77188 13.4206C2.55643 13.4206 3.19243 12.7846 3.19243 12C3.19247 11.4569 2.8876 10.9852 2.43975 10.7462Z"
+      fill="#F1D333"/>
+<path d="M11.9999 12C13.3075 12 14.3674 10.94 14.3674 9.63244C14.3674 8.32487 13.3075 7.26488 11.9999 7.26488C10.6923 7.26488 9.63232 8.32487 9.63232 9.63244C9.63232 10.94 10.6923 12 11.9999 12Z"
+      fill="#F1D0A5"/>
+<path d="M13.1775 7.57886C13.3768 7.92578 13.4914 8.32759 13.4914 8.75645C13.4914 10.064 12.4315 11.124 11.1239 11.124C10.695 11.124 10.2932 11.0094 9.94629 10.81C10.3548 11.5209 11.1212 12 11.9999 12C13.3075 12 14.3674 10.94 14.3674 9.63245C14.3674 8.75373 13.8883 7.98737 13.1775 7.57886Z"
+      fill="#F1B986"/>
+<path d="M8.02246 13.894V15.9775H15.9775V13.894C15.9775 12.848 15.1295 12 14.0834 12H9.91649C8.87048 12 8.02246 12.848 8.02246 13.894Z"
+      fill="#4E82D1"/>
+<path d="M14.0832 12H12.9468C13.9928 12 14.8408 12.848 14.8408 13.894V15.9775H15.9772V13.894C15.9773 12.848 15.1293 12 14.0832 12Z"
+      fill="#3F6CAE"/>
+<path d="M20.7129 5.18142C21.759 5.18142 22.607 4.33341 22.607 3.28734C22.607 2.24127 21.759 1.39326 20.7129 1.39326C19.6669 1.39326 18.8188 2.24127 18.8188 3.28734C18.8188 4.33341 19.6669 5.18142 20.7129 5.18142Z"
+      fill="#F6E266"/>
+<path d="M21.6033 1.61559C21.745 1.88109 21.8255 2.18409 21.8255 2.50607C21.8255 3.55213 20.9775 4.40015 19.9315 4.40015C19.6096 4.40015 19.3065 4.31957 19.041 4.17787C19.3597 4.77496 19.9887 5.18146 20.7128 5.18146C21.7588 5.18146 22.6068 4.33345 22.6068 3.28738C22.6068 2.56326 22.2003 1.93429 21.6033 1.61559Z"
+      fill="#F1D333"/>
+<path d="M20.7129 22.6067C21.759 22.6067 22.607 21.7587 22.607 20.7127C22.607 19.6666 21.759 18.8186 20.7129 18.8186C19.6669 18.8186 18.8188 19.6666 18.8188 20.7127C18.8188 21.7587 19.6669 22.6067 20.7129 22.6067Z"
+      fill="#F6E266"/>
+<path d="M21.6033 19.0409C21.745 19.3064 21.8255 19.6094 21.8255 19.9313C21.8255 20.9774 20.9775 21.8254 19.9315 21.8254C19.6096 21.8254 19.3065 21.7448 19.041 21.6031C19.3597 22.2002 19.9887 22.6067 20.7128 22.6067C21.7588 22.6067 22.6068 21.7587 22.6068 20.7126C22.6068 19.9885 22.2003 19.3596 21.6033 19.0409Z"
+      fill="#F1D333"/>
+<path d="M3.28714 22.6067C4.33322 22.6067 5.18122 21.7587 5.18122 20.7127C5.18122 19.6666 4.33322 18.8186 3.28714 18.8186C2.24107 18.8186 1.39307 19.6666 1.39307 20.7127C1.39307 21.7587 2.24107 22.6067 3.28714 22.6067Z"
+      fill="#F6E266"/>
+<path d="M4.17752 19.0409C4.31922 19.3064 4.3998 19.6094 4.3998 19.9313C4.3998 20.9774 3.55178 21.8254 2.50572 21.8254C2.18378 21.8254 1.88073 21.7448 1.61523 21.6031C1.93394 22.2002 2.56291 22.6067 3.28698 22.6067C4.33305 22.6067 5.18106 21.7587 5.18106 20.7126C5.18111 19.9885 4.77461 19.3596 4.17752 19.0409Z"
+      fill="#F1D333"/>
+<path d="M19.4458 12.3516H20.491C20.6545 13.1609 21.3712 13.7721 22.2279 13.7721C23.205 13.7721 24 12.9772 24 12C24 11.0228 23.205 10.2279 22.2279 10.2279C21.3711 10.2279 20.6545 10.8391 20.4909 11.6484H19.4457C19.3621 9.85767 18.644 8.22998 17.5112 6.98597L19.3939 5.10333C19.7645 5.37319 20.2201 5.53298 20.7127 5.53298C21.9509 5.53298 22.9583 4.52559 22.9583 3.28734C22.9583 2.04909 21.9509 1.04175 20.7127 1.04175C19.4744 1.04175 18.4671 2.04914 18.4671 3.28734C18.4671 3.77986 18.6268 4.23553 18.8967 4.60612L17.014 6.48877C15.77 5.35598 14.1423 4.63781 12.3516 4.55428V3.50906C13.1609 3.34552 13.7721 2.62889 13.7721 1.77211C13.7721 0.794953 12.9772 0 12 0C11.0228 0 10.2279 0.794953 10.2279 1.77211C10.2279 2.62889 10.8391 3.34552 11.6484 3.50906V4.55423C9.85767 4.63781 8.22998 5.35594 6.98597 6.48872L5.10342 4.60622C5.37333 4.23558 5.53312 3.77986 5.53312 3.28734C5.53312 2.53959 5.16277 1.84327 4.54242 1.42467C4.38136 1.31611 4.16287 1.35848 4.05436 1.51945C3.94575 1.68042 3.98817 1.89891 4.14909 2.00752C4.57547 2.29519 4.82995 2.77364 4.82995 3.28734C4.82995 4.13794 4.13789 4.83 3.2873 4.83C2.4367 4.83 1.74469 4.13794 1.74469 3.28734C1.74469 2.60044 2.2057 1.98989 2.8658 1.80263C3.05259 1.74961 3.16106 1.55522 3.10805 1.36842C3.05503 1.18163 2.86055 1.0733 2.67389 1.12617C1.71277 1.39889 1.04156 2.28759 1.04156 3.28734C1.04156 4.52569 2.049 5.53312 3.28734 5.53312C3.77991 5.53312 4.23562 5.37333 4.60622 5.10342L6.48877 6.98592C5.35594 8.22994 4.63781 9.85763 4.55423 11.6484H3.50906C3.34552 10.8391 2.62889 10.2278 1.77211 10.2278C0.794953 10.2279 0 11.0228 0 12C0 12.9772 0.794953 13.7721 1.77211 13.7721C2.62889 13.7721 3.34552 13.1609 3.50906 12.3516H4.55428C4.63786 14.1423 5.35598 15.77 6.48881 17.014L4.60612 18.8967C4.23553 18.6268 3.77986 18.467 3.28734 18.467C2.04909 18.467 1.04175 19.4744 1.04175 20.7127C1.04175 21.9509 2.04909 22.9583 3.28734 22.9583C4.52559 22.9583 5.53294 21.9509 5.53294 20.7127C5.53294 20.2201 5.37319 19.7645 5.10328 19.3939L6.98597 17.5112C8.22998 18.644 9.85767 19.3622 11.6484 19.4457V20.4909C10.8391 20.6544 10.2279 21.3711 10.2279 22.2278C10.2279 23.205 11.0228 24 12 24C12.9772 24 13.7721 23.205 13.7721 22.2279C13.7721 21.3711 13.1609 20.6545 12.3516 20.4909V19.4458C14.1423 19.3622 15.77 18.6441 17.014 17.5113L18.8966 19.3938C18.6267 19.7644 18.4669 20.2201 18.4669 20.7127C18.4669 21.951 19.4743 22.9584 20.7127 22.9584C21.951 22.9584 22.9584 21.951 22.9584 20.7127C22.9584 20.4696 22.9197 20.2302 22.8434 20.001C22.7819 19.8168 22.5827 19.7173 22.3987 19.7786C22.2145 19.84 22.1149 20.0391 22.1763 20.2233C22.2287 20.3806 22.2554 20.5453 22.2554 20.7126C22.2554 21.5632 21.5633 22.2553 20.7127 22.2553C19.8621 22.2553 19.17 21.5632 19.17 20.7126C19.17 19.862 19.8621 19.17 20.7127 19.17C20.9074 19.17 21.0972 19.2058 21.2769 19.2764C21.4575 19.3474 21.6617 19.2585 21.7327 19.0778C21.8038 18.8971 21.7148 18.693 21.5341 18.622C21.2722 18.519 20.9958 18.4668 20.7127 18.4668C20.2202 18.4668 19.7645 18.6266 19.3939 18.8965L17.5113 17.014C18.644 15.77 19.3622 14.1423 19.4458 12.3516ZM22.2279 10.931C22.8173 10.931 23.2969 11.4105 23.2969 12C23.2969 12.5895 22.8173 13.069 22.2279 13.069C21.6384 13.069 21.1589 12.5895 21.1589 12C21.1589 11.4105 21.6385 10.931 22.2279 10.931ZM20.7127 1.74487C21.5632 1.74487 22.2551 2.43684 22.2551 3.28734C22.2551 4.13789 21.5632 4.82986 20.7127 4.82986C19.8622 4.82986 19.1702 4.13789 19.1702 3.28734C19.1702 2.4368 19.8622 1.74487 20.7127 1.74487ZM10.931 1.77211C10.931 1.18266 11.4106 0.703125 12 0.703125C12.5894 0.703125 13.069 1.18266 13.069 1.77211C13.069 2.36156 12.5894 2.84109 12 2.84109C11.4106 2.84109 10.931 2.36152 10.931 1.77211ZM1.77211 13.069C1.18266 13.069 0.703125 12.5895 0.703125 12C0.703125 11.4105 1.18266 10.931 1.77211 10.931C2.36156 10.931 2.84105 11.4105 2.84105 12C2.84105 12.5895 2.36152 13.069 1.77211 13.069ZM12 5.24887C15.7226 5.24887 18.7511 8.27742 18.7511 12C18.7511 15.7226 15.7226 18.7511 12 18.7511C8.27742 18.7511 5.24887 15.7226 5.24887 12C5.24887 8.27738 8.27742 5.24887 12 5.24887ZM3.28734 22.2551C2.4368 22.2551 1.74487 21.5632 1.74487 20.7127C1.74487 19.8621 2.43684 19.1701 3.28734 19.1701C4.13784 19.1701 4.82981 19.8621 4.82981 20.7127C4.82981 21.5632 4.13784 22.2551 3.28734 22.2551ZM13.069 22.2279C13.069 22.8173 12.5894 23.2969 12 23.2969C11.4106 23.2969 10.931 22.8173 10.931 22.2279C10.931 21.6384 11.4106 21.1589 12 21.1589C12.5894 21.1589 13.069 21.6385 13.069 22.2279Z"
+      fill="#21252F"/>
+<path d="M8.02286 16.3289H10.0082C10.0093 16.3289 10.0104 16.329 10.0114 16.329C10.0125 16.329 10.0135 16.3289 10.0146 16.3289H11.1799C11.3741 16.3289 11.5314 16.1715 11.5314 15.9773C11.5314 15.7832 11.3741 15.6258 11.1799 15.6258H10.363V15.0305C10.363 14.8363 10.2056 14.6789 10.0114 14.6789C9.81723 14.6789 9.65987 14.8363 9.65987 15.0305V15.6258H8.37442V13.8942C8.37442 13.0436 9.06625 12.3516 9.91656 12.3516H14.0837C14.9341 12.3516 15.6259 13.0436 15.6259 13.8942V15.6258H14.3404V15.0305C14.3404 14.8363 14.1831 14.6789 13.9889 14.6789C13.7947 14.6789 13.6373 14.8363 13.6373 15.0305V15.6258H12.8205C12.6263 15.6258 12.4689 15.7832 12.4689 15.9773C12.4689 16.1715 12.6263 16.3289 12.8205 16.3289H13.9858C13.9869 16.3289 13.9879 16.329 13.989 16.329C13.99 16.329 13.9911 16.3289 13.9922 16.3289H15.9775C16.1717 16.3289 16.3291 16.1715 16.3291 15.9773V13.8942C16.3291 12.6559 15.3219 11.6484 14.0838 11.6484H13.8228C14.3731 11.1505 14.7194 10.4312 14.7194 9.63244C14.7194 8.1331 13.4996 6.91331 12.0002 6.91331C10.5009 6.91331 9.28112 8.1331 9.28112 9.63244C9.28112 10.4312 9.62743 11.1505 10.1777 11.6484H9.91665C8.67859 11.6484 7.67139 12.6559 7.67139 13.8942V15.9773C7.67129 16.1715 7.8287 16.3289 8.02286 16.3289ZM9.9842 9.63244C9.9842 8.52085 10.8886 7.61644 12.0002 7.61644C13.1118 7.61644 14.0162 8.5208 14.0162 9.63244C14.0162 10.7441 13.1118 11.6484 12.0002 11.6484C10.8886 11.6484 9.9842 10.7441 9.9842 9.63244Z"
+      fill="#21252F"/>
+</svg>
+
+                </span>
+                4 Реферала
+                <span class="progress">
+                    <input type="text">
+                </span>
+                <span class="level">
+
+                </span>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script type="text/javascript" src="main.js"></script>
+
+</body>
+
+</html>
